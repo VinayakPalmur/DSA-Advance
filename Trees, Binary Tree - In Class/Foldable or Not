@@ -1,0 +1,62 @@
+/*
+// Information about the class Node
+class Node{
+    int data;
+    Node left;
+    Node right;
+    Node(int data){
+        this.data = data;
+        left=null;
+        right=null;
+    }
+}
+*/
+static boolean isFoldable(Node node)
+{
+     // Your code here
+      boolean res;
+ 
+        /* base case */
+        if (node == null)
+            return true;
+ 
+        /* convert left subtree to its mirror */
+        mirror(node.left);
+ 
+        /* Compare the structures of the right subtree and mirrored
+         left subtree */
+        res = isStructSame(node.left, node.right);
+ 
+        /* Get the original tree back */
+        mirror(node.left);
+ 
+        return res;
+}
+static boolean   isStructSame(Node a, Node b)
+    {
+        if (a == null && b == null)
+            return true;
+        if (a != null && b != null
+            && isStructSame(a.left, b.left)
+            && isStructSame(a.right, b.right))
+            return true;
+ 
+        return false;
+    }
+public static void mirror(Node node)
+    {
+        if (node == null)
+            return;
+        else {
+            Node temp;
+ 
+            /* do the subtrees */
+            mirror(node.left);
+            mirror(node.right);
+ 
+            /* swap the pointers in this node */
+            temp = node.left;
+            node.left = node.right;
+            node.right = temp;
+        }
+    }
