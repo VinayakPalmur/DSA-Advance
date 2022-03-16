@@ -1,0 +1,30 @@
+/*
+ class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = null;
+        right = null;
+    }
+}
+*/
+static int sum;
+static void check(Node root){
+    if(root==null)
+    return;
+    if(root.left==null && root.right==null){
+        sum+=root.data;
+    }
+    
+    check(root.left);
+    check(root.right);
+}
+public static int sumOfLeaf(Node root)
+ {
+    sum=0;
+     check(root);
+       return sum;
+      // Your code here
+ }
