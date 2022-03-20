@@ -1,0 +1,18 @@
+<html>
+    <head><title>JOB</title></head>
+    <main>
+        <h1>Items to buy :</h1>
+        <ol>
+            <li data-ns-test="shoppingList">snacks</li>
+            <li data-ns-test="shoppingList">car</li>
+            <li data-ns-test="shoppingList">drinks</li>
+        </ol>
+
+        <h1>places to visit :</h1>
+        <ul>
+             <li data-ns-test="holidayList">Chicago</li>
+            <li data-ns-test="holidayList">Amsterdam</li>
+            <li data-ns-test="holidayList">Leh</li>
+            </ul>
+            </main>
+            </html>
