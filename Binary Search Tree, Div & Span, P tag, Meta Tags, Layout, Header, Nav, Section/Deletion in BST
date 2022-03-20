@@ -1,0 +1,46 @@
+/*
+// Information about the class
+class Node{
+    int data;
+    Node left;
+    Node right;
+    Node(int data){
+        this.data = data;
+        left=null;
+        right=null;
+    }
+}
+*/
+public static Node deleteInBST(Node root, int value) 
+{
+       if (root == null) {
+            return null;
+        }
+        
+        if (root.data > value) {
+            root.left = deleteInBST(root.left, value);
+        }
+        else if (root.data < value) {
+            root.right = deleteInBST(root.right, value);
+        }
+        else {
+            if (root.left == null) return root.right;
+            if (root.right == null) return root.left;
+            
+            // having two children, find leftmost node in right subtree
+            Node minNode = getMin(root.right);
+        
+            // will return current root.right if root.right is not the only node in the right subtree
+            root.right = deleteInBST(root.right, minNode.data); 
+            minNode.left = root.left;
+            minNode.right = root.right;
+            root = minNode;
+        }
+        
+        return root;
+    }
+    
+    public static Node getMin(Node node) {
+        while (node.left != null) node = node.left;
+        return node;
+    }
