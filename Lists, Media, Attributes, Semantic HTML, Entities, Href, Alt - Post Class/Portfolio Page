@@ -1,0 +1,30 @@
+<html>
+    <head>
+    
+        <title>portfolio</title>
+    </head>
+<body>
+    <label for = "AnchorTag"><a href="https://www.linkedin.com/in/palmur-vijay-a1a0051bb">GoogleSite</a></label>
+    <h1>Portfolio</h1>
+    <p>
+        <a href = "https://www.google.com/search?q=vinayak+palmur&rlz=1C1VDKB_enIN995IN995&sxsrf=APq-WBsVfFQm3z6m2eYjTGgt5uUHDRKaNA:1647751769265&tbm=isch&source=iu&ictx=1&vet=1&fir=-L5Mj6YZY01wZM%252CkFTboFz6eXVveM%252C_%253BXtw36TSqKHV06M%252CdYkd5Fo2PjMNaM%252C_%253BTCK47H68O-ywnM%252C-_sPanjrcnL_CM%252C_%253B7U0EP9XavMCBaM%252C-_sPanjrcnL_CM%252C_%253BoyWeoVk13ey4XM%252C-_sPanjrcnL_CM%252C_%253BLJLvxW4_PCOQSM%252C6aso-cj4mkqS4M%252C_%253BG7LtbWa4Q1rSPM%252CEXNvSXZCohurYM%252C_%253BWDFnomXhtoTt9M%252Cr-f62jlIGq132M%252C_%253B4ZjkAdPqMFXnJM%252C6aso-cj4mkqS4M%252C_%253BpQ4uM8cZgMTN4M%252C-_sPanjrcnL_CM%252C_&usg=AI4_-kQgmFCat6paXu6OxRlZ4X5SOKayjA&sa=X&sqi=2&ved=2ahUKEwiZqonX8dP2AhWsw4sKHZBfAuUQ9QF6BAgSEAE#imgrc=-L5Mj6YZY01wZM"><img src=  "https://media-exp1.licdn.com/dms/image/C5103AQEDmRIU8PgyIg/profile-displayphoto-shrink_200_200/0/1567714365401?e=2147483647&v=beta&t=2q3-upxpbpE2IET4f0BA6r99zI4rutJSc1DiDUonh6c">image</a>
+</p>
+<section id = "projects">
+        
+            <ul>
+                
+              <li> a</li>
+             <li>b</li>
+            <li><a href = "https://my.newtonschool.co/user/vvpalmur/"><img src=  "https://media-exp1.licdn.com/dms/image/C5103AQEDmRIU8PgyIg/profile-displayphoto-shrink_200_200/0/1567714365401?e=2147483647&v=beta&t=2q3-upxpbpE2IET4f0BA6r99zI4rutJSc1DiDUonh6c">image</a></li>
+            </ul>
+
+        </section>
+        <section id = "skills">
+           <p>hi</p>
+           <a href = "https://www.linkedin.com/in/navjot-rathee-4073b4176" >profile</a>
+        </section>
+    
+    <a href = "https://my.newtonschool.co/user/vvpalmur/"><img src=  "https://media-exp1.licdn.com/dms/image/C5103AQEDmRIU8PgyIg/profile-displayphoto-shrink_200_200/0/1567714365401?e=2147483647&v=beta&t=2q3-upxpbpE2IET4f0BA6r99zI4rutJSc1DiDUonh6c">image</a></li>
+
+        </body>
+        </html>
