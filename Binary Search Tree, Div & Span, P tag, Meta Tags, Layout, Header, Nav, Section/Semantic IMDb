@@ -1,0 +1,31 @@
+<html>
+    <body>
+
+    <header>RHTDM</header>
+
+    <nav>
+    <a href="#actor" id="nav-actor">Actors</a>
+    <a href="#quote" id="nav-quote">quotes</a>
+    </nav>
+
+    <section id="actor">
+        Madhvan
+    </section>
+     <section id="quote">
+      Rehna he tere dil me
+    </section>
+    <summary>
+        Rehnaa Hai Terre Dil Mein (transl. I want to stay in your heart) 
+        also known by the initialism RHTDM is a 2001 Indian Hindi-language
+         romantic drama film written and directed by Gautham Vasudev Menon,
+          starring Madhavan, Dia Mirza and Saif Ali Khan in the lead roles. 
+    </summary>
+    
+<aside>
+    <p> 9.1 Star IMDB rating </p>
+</aside>
+
+<footer>Produced by: vidhu vinod chopra</footer>
+
+    </body>
+</html>
