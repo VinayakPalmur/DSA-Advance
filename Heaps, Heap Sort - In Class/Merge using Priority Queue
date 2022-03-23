@@ -1,0 +1,65 @@
+import java.io.*; // for handling input/output
+import java.util.*; // contains Collections framework
+
+// don't change the name of this class
+// you can add inner classes if needed
+class Main {
+	public static void main (String[] args) {
+                      // Your code here
+					  Scanner sc = new Scanner (System.in);
+					  //int t = sc.nextInt();
+					//  while (t>0)
+					 // {
+						  int n= sc.nextInt();
+						  int k=sc.nextInt();
+						  int A[]=new int[n];
+						  int B[]=new int[k];
+						  for(int i=0; i<n; i++)
+						  A[i]=sc.nextInt();
+						  for(int j=0; j<k;j++)
+						  B[j]=sc.nextInt();
+					  
+					  int N = A.length;
+    				  int M = B.length;
+ 
+    // Function call
+    					merge(A, B, N, M);
+					  //}
+	}
+	public static void merge(int A[], int B[], int N, int M)
+{
+     
+    // Stores the merged array
+    int []res = new int[N + M];
+     
+    // Create a min priority_queue
+    Queue<Integer> pq = new PriorityQueue<>();
+     
+    // Traverse the array A[]
+    for(int i = 0; i < N; i++)
+        pq.add(A[i]);
+     
+    // Traverse the array B[]
+    for(int i = 0; i < M; i++)
+        pq.add(B[i]);
+     
+    int j = 0;
+     
+    // Iterate until the
+    // pq is not empty
+    while (!pq.isEmpty())
+    {
+         
+        // Stores the top element
+        // of pq into res[j]
+        res[j++] = pq.peek();
+     
+        // Removes the top element
+        pq.remove();
+    }
+     
+    // Print the merged array
+    for(int i = 0; i < N + M; i++)
+        System.out.print(res[i] + " ");
+}
+}
