@@ -1,0 +1,26 @@
+<form>
+  Name <input type="text" placeholder="Name" id="name"><br>
+Phone Number <input type="text" placeholder="Phone Number" id="phone"><br>
+Address <input type="text" placeholder="Address" id="address"><br>
+
+    <label><input type="checkbox" id="checkbox" name="address" value="Have you ever lived with a Dog before?">Have you ever lived with a Dog before?</label>
+<br>
+
+
+
+Please select your preferred breeds<br>
+
+
+  <select class="select" id="multiSelect">
+  <option value="1">One</option>
+  <option value="2">Two</option>
+  <option value="3">Three</option>
+  <option value="4">Four</option>
+  <option value="5">Five</option>
+</select><br>
+
+
+<input id="submit" type="submit" value="Submit">
+
+
+</form>
