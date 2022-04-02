@@ -1,0 +1,18 @@
+<table border = 2px>
+<thead>
+        <tr>
+            <th>roll number</th>
+            <th>name</th>
+        </tr>
+</thead>
+<tbody>
+        <tr>
+            <td>1</td>
+            <td>Vinayak</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Ruvi</td>
+        </tr>
+</tbody>
+</table>
