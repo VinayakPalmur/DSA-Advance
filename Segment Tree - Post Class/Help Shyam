@@ -1,0 +1,262 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+ 
+
+int64_t INF64 = int64_t(2e18) + 5;                  
+
+int INF = int(1e6) + 5;
+
+
+ 
+
+class segment_tree {
+
+    private:
+
+        int N;
+
+        vector<pair<int64_t, int64_t>> seg_tree;
+
+        vector<int64_t> A;
+
+    public:
+
+        segment_tree(vector<int64_t> _A, int _N) {
+
+            this->N = _N;
+
+            this->A = _A;
+
+
+ 
+
+            while (__builtin_popcount(N) != 1) { // make the len(array) to power of 2 by padding
+
+                A.push_back(0);
+
+                ++N;
+
+            }
+
+
+ 
+
+            seg_tree.resize(2 * N);
+
+            build();
+
+        }
+
+
+ 
+
+int len() {
+
+return N;
+
+}
+
+
+ 
+
+    /****************************************** Build the tree ******************************************/
+
+    
+
+        void build() {
+
+         for (int i = 0; i < N; i++) {
+
+             if (A[i] == 0)
+
+                 seg_tree[N + i] = make_pair(0, 0);
+
+             else
+
+             seg_tree[N + i] = A[i] % 2 == 0 ? make_pair(1, 0) : make_pair(0, 1);
+
+         }
+
+
+ 
+
+         for (int i = N - 1; i >= 0; i--)
+
+         seg_tree[i] = operation(seg_tree[2 * i], seg_tree[2 * i + 1]);
+
+        }
+
+
+ 
+
+    /************************************ Query *********************************************************/
+
+
+ 
+
+        pair<int, int> queries(int root, int root_left, int root_right, int L, int R) {
+
+            if (L <= root_left && root_right <= R) // if left and right of the root lies b/w the range
+
+                return seg_tree[root]; // of the query
+
+
+ 
+
+            if (R < root_left || root_right < L) // check if the query is out of bound or not
+
+                return {0, 0};
+
+        
+
+            int mid = (root_left + root_right) / 2;
+
+            return operation(queries(2 * root, root_left, mid, L, R),
+
+                            queries(2 * root + 1, mid + 1, root_right, L, R));
+
+        }
+
+
+ 
+
+    /*************************************** Update ****************************************************/
+
+
+ 
+
+        void update(int position, int newValue) {
+
+            seg_tree[N + position] = newValue % 2 == 0 ? make_pair(1, 0) : make_pair(0, 1);
+
+            for (int i = (N + position) / 2; i >= 1; i /= 2)
+
+                seg_tree[i] = operation(seg_tree[2 * i], seg_tree[2 * i + 1]);
+
+        }
+
+
+ 
+
+    /************************************** OPeration ********************************************/
+
+
+ 
+
+        pair<int64_t, int64_t> operation(pair<int64_t, int64_t> a, pair<int64_t, int64_t> b) {
+
+            int64_t even = a.first + b.first;
+
+            int64_t odd = a.second + b.second;
+
+            return make_pair(even, odd);
+
+        }
+
+};
+
+
+
+ 
+
+int main() {
+
+ios::sync_with_stdio(false);
+
+#ifndef AMiT
+
+    cin.tie(NULL), cout.tie(NULL);
+
+#endif
+
+
+ 
+
+// #ifndef ONLINE_JUDGE
+
+// freopen("input.txt", "r", stdin);
+
+// freopen("output1.txt", "w", stdout);
+
+// #endif
+
+
+ 
+
+    int n;
+
+    cin >> n;
+
+    vector<int64_t> A(n);
+
+
+ 
+
+    for (auto &a : A)
+
+        cin >> a;
+
+
+ 
+
+    segment_tree *tree = new segment_tree(A, n);
+
+
+ 
+
+    int newLen = tree->len();
+
+    int query;
+
+    cin >> query;
+
+
+ 
+
+    while (query-- > 0) {
+
+        int q;
+
+        cin >> q;
+
+
+ 
+
+        if (q == 0) {
+
+            int pos, val;
+
+            cin >> pos >> val;
+
+            --pos;
+
+            tree->update(pos, val);
+
+        }
+
+        else {
+
+            int L, R;
+
+            cin >> L >> R;
+
+            --L; --R;
+
+
+ 
+
+            pair<int64_t, int64_t> ans = tree->queries(1, 0, newLen - 1, L, R);
+
+            cout << (q == 1 ? ans.first : ans.second) << '\n';
+
+        }
+
+    }
+
+
+ 
+
+}
