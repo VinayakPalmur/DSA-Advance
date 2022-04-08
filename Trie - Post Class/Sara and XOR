@@ -1,0 +1,107 @@
+import java.io.*; // for handling input/output
+import java.util.*; // contains Collections framework
+
+// don't change the name of this class
+// you can add inner classes if needed
+class Main {
+	 public static final int SIZE = 64;
+ 
+    public static void main(String args[] ) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String str = br.readLine();       
+        
+        int q = Integer.parseInt(str);
+        Trie trie = new Trie();
+        while(q-- > 0) {
+            str = br.readLine();
+            String [] arr = str.split(" ");
+            if (arr[0].equals("1")) {
+                trie.add(Long.parseLong(arr[1]));
+            } 
+            else {
+                long x = Long.parseLong(arr[1]);
+                System.out.println(trie.find(x, Integer.parseInt(arr[2])));
+            }
+        }
+    }
+ 
+    private static class Node {
+        private int leftCount, rightCount;
+        private byte key;
+        private Node left, right;
+ 
+        public Node(byte key) {
+            this.leftCount = 0;
+            this.rightCount = 0;
+            this.key = key;
+            this.left = null;
+            this.right = null;
+        }
+    }
+ 
+    private static class Trie {
+        private Node root;
+        public Trie() {
+            this.root = new Node((byte) 0);
+        }
+ 
+        public Node getRoot() {
+            return root;
+        }
+ 
+        public void add(long x) {
+            Node currNode = this.root;
+            for (int i = Main.SIZE - 1; i >=0; --i) {
+                long res = x & (1L << i);
+                byte bit = (byte) (res != 0 ? 1 : 0);
+                Node nextNode;
+                if (bit == 0) {
+                    nextNode = currNode.left != null ? currNode.left : new Node(bit);
+                    currNode.left = nextNode;
+                    currNode.leftCount++;
+                } else {
+                    nextNode = currNode.right != null ? currNode.right : new Node(bit);
+                    currNode.right = nextNode;
+                    currNode.rightCount++;
+                }
+                currNode = nextNode;
+            }
+        }
+ 
+        public void preOrder(Node node) {
+            if (node != null) {
+                this.preOrder(node.left);
+                this.preOrder(node.right);
+            }
+        }
+ 
+        public long find(long num, int k) {
+            Node currNode = this.root;
+            long result = 0L;
+            for (int i = Main.SIZE - 1; i >= 0; --i) {
+                long res = num & (1L << i);
+                byte b = (byte) (res != 0 ? 1 : 0);
+                byte leftXor = (byte) (b ^ 0);
+                byte rightXor = (byte) (b ^ 1);
+                if (leftXor != 0) {
+                    if (k > currNode.rightCount) {
+                        k -= currNode.rightCount;
+                        currNode = currNode.left;
+                        result |= (1L << i);
+                    } else {
+                        currNode = currNode.right;
+                    }
+                } else {
+                    if (k > currNode.leftCount) {
+                        k -= currNode.leftCount;
+                        currNode = currNode.right;
+                        result |= (1L << i);
+                    } else {
+                        currNode = currNode.left;
+                    }
+                }
+            }
+            return result;
+        }
+    }
+}
