@@ -1,0 +1,226 @@
+class HLD{
+public:
+    #define MAXN 10005
+    int N, Q, A[MAXN], DEP[MAXN], PAR[MAXN], CHAIN[MAXN], SZ[MAXN], HEAD[MAXN];
+    int IND[MAXN], VERT[MAXN], chainNum = 0, chainInd = 0, curInd = 0, L[MAXN];
+    int R[MAXN], VAL[MAXN], SUM[MAXN], TSZ[MAXN], ROOT[MAXN], curNode = 0;
+    bool REV[MAXN];
+    vector<int> adj[MAXN];
+         
+    int makeNode(int val) {
+        ++curNode;
+        SUM[curNode] = VAL[curNode] = val;
+        REV[curNode] = 0;
+        TSZ[curNode] = 1;
+        L[curNode] = R[curNode] = 0;
+        return curNode;
+    }
+        
+    void reverse(int x) {
+        if (x) REV[x] ^= 1;
+    }
+     
+    void update(int x) {
+        if (x) {
+            TSZ[x] = 1 + TSZ[L[x]] + TSZ[R[x]];
+            SUM[x] = VAL[x] + SUM[L[x]] + SUM[R[x]];
+        }
+    }
+     
+    void propagate(int x) {
+        if (x && REV[x]) {
+            reverse(x);
+            swap(L[x], R[x]);
+            reverse(L[x]);
+            reverse(R[x]);
+        }
+    }
+     
+    void merge(int &x, int l, int r){
+        propagate(l);
+        propagate(r);
+
+        if (!l || !r) {
+            x = l ? l : r;
+        }else {
+            merge(L[r], l, L[r]);
+            x = r;
+        }
+        update(x);
+    }
+     
+    void split(int x, int &l, int &r, int ind) {
+        if (!x) {
+            l = r = 0;
+            return;
+        }
+
+        propagate(x);
+        if (ind <= TSZ[L[x]]) {
+            split(L[x], l, L[x], ind);
+            r = x;
+        } else {
+            split(R[x], R[x], r, ind - TSZ[L[x]] - 1);
+            l = x;
+        }
+        update(x);
+    }
+     
+    void dfs(int v, int d, int prev) {
+        DEP[v] = d;
+        PAR[v] = prev;
+        SZ[v] = 1;
+        for (int w : adj[v]) {
+            if (w == prev) continue;
+            dfs(w, d + 1, v);
+            SZ[v] += SZ[w];
+        }
+    }
+     
+    void hld(int v, int prev) {
+        if (HEAD[chainNum] == -1) {
+            HEAD[chainNum] = v;
+            chainInd = 0;
+        }
+        CHAIN[v] = chainNum;
+        IND[v] = chainInd++;
+        VERT[curInd++] = v;
+        int maxInd = -1;
+        for (int w : adj[v]){
+            if (w != prev && (maxInd == -1 || SZ[maxInd] < SZ[w])) maxInd = w;
+        }
+        if (maxInd != -1) hld(maxInd, v);
+        for (int w : adj[v]) {
+            if (w == prev || w == maxInd) continue;
+            chainNum++;
+            hld(w, v);
+        }
+    }
+     
+    int lca(int v, int w) {
+        while (CHAIN[v] != CHAIN[w]) {
+            if (DEP[HEAD[CHAIN[v]]] < DEP[HEAD[CHAIN[w]]]) w = PAR[HEAD[CHAIN[w]]];
+            else v = PAR[HEAD[CHAIN[v]]];
+        }
+        if (DEP[v] < DEP[w]) return v;
+        return w;
+    }
+     
+    int getLastChainInd(int v, int w) {
+        while (CHAIN[v] != CHAIN[w]) v = PAR[HEAD[CHAIN[v]]];
+        return IND[v];
+    }
+     
+    int queryUp(int v, int w, bool includeW) {
+        int ret = 0;
+        int l, m, r;
+        while (CHAIN[v] != CHAIN[w]) {
+            split(ROOT[CHAIN[v]], l, r, IND[v] + 1);
+            ret += SUM[l];
+            merge(ROOT[CHAIN[v]], l, r);
+            v = PAR[HEAD[CHAIN[v]]];
+        }
+        if (!includeW && v == w) return ret;
+        split(ROOT[CHAIN[v]], l, r, IND[v] + 1);
+        split(l, l, m, IND[w] + !includeW);
+        ret += SUM[m];
+        merge(ROOT[CHAIN[v]], l, m);
+        merge(ROOT[CHAIN[v]], ROOT[CHAIN[v]], r);
+        return ret;
+    }
+     
+    int queryPath(int v, int w) {
+        int lcaVert = lca(v, w);
+        return queryUp(v, lcaVert, true) + queryUp(w, lcaVert, false);
+    }
+     
+    void splitUp(int v, int w, bool includeW, int &temp) {
+        int l, m, r;
+        while (CHAIN[v] != CHAIN[w]) {
+            split(ROOT[CHAIN[v]], l, ROOT[CHAIN[v]], IND[v] + 1);
+            reverse(l);
+            merge(temp, temp, l);
+            v = PAR[HEAD[CHAIN[v]]];
+        }
+        if (!includeW && v == w) return;
+        split(ROOT[CHAIN[v]], l, r, IND[v] + 1);
+        split(l, l, m, IND[w] + !includeW);
+        reverse(m);
+        merge(temp, temp, m);
+        merge(ROOT[CHAIN[v]], l, r);
+    }
+     
+    void mergeUp(int v, int w, bool includeW, int &temp) {
+        int l, m, r;
+        while (CHAIN[v] != CHAIN[w]) {
+            split(temp, l, temp, IND[v] + 1);
+            reverse(l);
+            merge(ROOT[CHAIN[v]], l, ROOT[CHAIN[v]]);
+            v = PAR[HEAD[CHAIN[v]]];
+        }
+        if (!includeW && v == w) return;
+        split(ROOT[CHAIN[v]], l, r, IND[w] + !includeW);
+        split(temp, m, temp, IND[v] - (IND[w] + !includeW) + 1);
+        reverse(m);
+        merge(ROOT[CHAIN[v]], l, m);
+        merge(ROOT[CHAIN[v]], ROOT[CHAIN[v]], r);
+    }
+     
+    void reversePath(int v, int w) {
+        int lcaVert = lca(v, w);
+        if (getLastChainInd(v, lcaVert) < getLastChainInd(w, lcaVert)){
+            swap(v, w);
+        }
+        int tv = 0, tw = 0;
+        splitUp(v, lcaVert, false, tv);
+        splitUp(w, lcaVert, true, tw);
+        reverse(tw);
+        merge(tv, tv, tw);
+        reverse(tv);
+        mergeUp(v, lcaVert, true, tv);
+        reverse(tv);
+        mergeUp(w, lcaVert, false, tv);
+    }
+
+};
+ 
+
+ 
+vector<int> treeQuery(int n,int q,vector<vector<int>> &edges,vector<int> &val,vector<vector<int>> &queries){
+    HLD obj;
+
+    obj.N = n;
+    obj.Q = q;    
+    int a, b;
+    vector<int> ans;
+    for(int i = 0; i < obj.N-1; i++){
+        a = edges[i][0];
+        b = edges[i][1];
+        obj.adj[--a].push_back(--b);
+        obj.adj[b].push_back(a);
+    }
+    for(int i = 0; i < obj.N; i++){
+        obj.A[i] = val[i];
+        obj.HEAD[i] = -1;
+        obj.ROOT[i] = 0;
+    }
+    
+    obj.dfs(0, 0, -1);
+    obj.hld(0, -1);
+    for(int i = 0; i < obj.N; i++){
+        obj.merge(obj.ROOT[obj.CHAIN[obj.VERT[i]]], obj.ROOT[obj.CHAIN[obj.VERT[i]]], obj.makeNode(obj.A[obj.VERT[i]]));
+    }
+
+    int op;
+    for(int i = 0; i < obj.Q; i++){
+        op = queries[i][0];
+        a = queries[i][1];
+        b = queries[i][2];
+        a--; b--;
+        if (op == 1) obj.reversePath(a, b);
+        else if (op == 2){
+            ans.push_back(obj.queryPath(a,b));
+        }
+    }
+    return ans;
+}
