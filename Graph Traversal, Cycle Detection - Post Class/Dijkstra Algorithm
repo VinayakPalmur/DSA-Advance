@@ -1,0 +1,75 @@
+import java.io.*; // for handling input/output
+import java.util.*; // contains Collections framework
+
+// don't change the name of this class
+// you can add inner classes if needed
+class Main {
+	public static void main(String args[] ) throws Exception {
+        int n,m;
+        BufferedReader br = new BufferedReader( new InputStreamReader(System.in));
+        String line = br.readLine();
+        StringTokenizer st = new StringTokenizer(line);
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+        ArrayList<ArrayList<int[]>> graph = new ArrayList<>(n+1);
+        for ( int i= 0; i <= n; i++){
+            graph.add( new ArrayList<int[]>());
+        }
+ 
+        for ( int i = 0; i < m; i++){
+            int u,v,w;
+            line = br.readLine();
+            if ( line == null)
+                continue;
+            st = new StringTokenizer(line);
+            u = Integer.parseInt( st.nextToken());
+            v = Integer.parseInt( st.nextToken());
+            w=(u+v)%1000;
+            // System.out.print(w+" ");
+            graph.get(u).add( new int[]{v,w});
+            graph.get(v).add( new int[]{u,w});
+        }
+        long[] dist = Dijkstra(graph,1);
+        for( int i = 2; i <= n ; i++){
+            if(dist[i]==9223372036854775807L){
+                System.out.println("-1");
+            }
+            else
+                System.out.println(dist[i]);
+        }
+    }
+ 
+    private static long[] Dijkstra( ArrayList<ArrayList<int[]>> graph, int source){
+        int n = graph.size();
+        long[] dist = new long[n];
+        boolean[] visited = new boolean[n];
+        Arrays.fill(dist,Long.MAX_VALUE);
+        PriorityQueue<long[]> queue = new PriorityQueue<>( (long[] i1,long[] i2)->{
+            if( i1[1] < i2[1])
+                return -1;
+            return 1;
+        });
+ 
+        queue.add(new long[]{source,0});
+        while ( !queue.isEmpty()){
+            
+            long[] cn = queue.remove();
+            if( visited[(int)cn[0]] ){
+                continue;
+            }
+            visited[(int)cn[0]] = true;
+            dist[(int)cn[0]] = cn[1];
+ 
+            for( int[] neighbour : graph.get((int)cn[0])){
+                if ( !visited[neighbour[0]] ){
+                    long newdistance = cn[1] + neighbour[1];
+                    if ( newdistance  < dist[neighbour[0]]){
+                        dist[neighbour[0]] = newdistance;
+                        queue.add( new long[]{neighbour[0],newdistance});
+                    }
+                }
+            }
+        }
+        return dist;
+    }
+}
