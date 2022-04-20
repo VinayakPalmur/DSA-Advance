@@ -1,0 +1,6 @@
+<p>My favorite color is <span class="favorite-color">green</span></p>
+
+css
+.favorite-color{
+    color: green;
+}
